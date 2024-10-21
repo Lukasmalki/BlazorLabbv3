@@ -1,0 +1,80 @@
+﻿@page "/newUsers"
+@rendermode InteractiveServer
+
+<PageTitle>NewUsers</PageTitle>
+
+<h1 style="margin-bottom: 50px">Ny Användare</h1>
+
+
+@if (!_isSaved)
+{
+	<div style="margin-bottom: 20px">
+
+		<label>Name</label>
+		<input @bind="_name" type="text" />
+
+		<label>Email</label>
+		<input @bind="_email" type="email" />
+
+	</div>
+
+	<div style="margin-bottom: 20px">
+
+		<label>Gatuadress</label>
+		<input @bind="_streetAddress" type="text" />
+
+		<label>Stad</label>
+		<input @bind="_city" type="text" />
+
+		<label>Postnummer</label>
+		<input @bind="_zipcode" type="number" />
+
+	</div>
+	<div>
+
+		<label>Företagsnamn</label>
+		<input @bind="_companyName" type="text" />
+
+		<label>Slagord</label>
+		<input @bind="_catchphrase" type="text" />
+
+	</div>
+
+	<button @onclick="DisplayUserInfo" style="margin-top: 30px">Spara</button>
+}
+else
+{
+	<p>Du har sparat följande användare, Namn: @_name, Email: @_email, Adress: @_streetAddress, @_city, @_zipcode, Company: @_companyName, Catchphrase: @_catchphrase</p>
+
+	<button @onclick="ClearInfoAndRegisterNewUser">Registrera ny användare</button>
+}
+
+
+
+@code {
+	private bool _isSaved = false;
+	private string? _name;
+	private string? _email;
+	private string? _streetAddress;
+	private string? _city;
+	private int? _zipcode;
+	private string? _companyName;
+	private string? _catchphrase;
+
+
+	private void DisplayUserInfo() {
+		_isSaved = true;
+	}
+
+	private void ClearInfoAndRegisterNewUser()
+	{
+		_isSaved = false;
+		_name = "";
+		_email = "";
+		_streetAddress = "";
+		_city = "";
+		_zipcode = null;
+		_companyName = "";
+		_catchphrase = "";
+	}
+}
