@@ -1,13 +1,15 @@
 ﻿@page "/weather"
 @attribute [StreamRendering]
+@rendermode InteractiveServer
+@using System.Text.Json;
 
-<PageTitle>Weather</PageTitle>
+<PageTitle>Users</PageTitle>
 
-<h1>Weather</h1>
+<h1>Users</h1>
 
-<p>This component demonstrates showing data.</p>
+<p>Existerande användare</p>
 
-@if (forecasts == null)
+@if (users == null)
 {
     <p><em>Loading...</em></p>
 }
@@ -16,20 +18,43 @@ else
     <table class="table">
         <thead>
             <tr>
-                <th>Date</th>
-                <th>Temp. (C)</th>
-                <th>Temp. (F)</th>
-                <th>Summary</th>
+                <th>Id</th>
+                <th>Namn</th>
+                <th>Användarnamn</th>
+                <th>Email</th>
+                <th>Telefonnummer</th>
+                <th>Hemsida</th>
+                <th>Gatuadress</th>
+                <th>Lägenhet</th>
+                <th>Stad</th>
+                <th>Postnummer</th>
+                <th>Latitud</th>
+                <th>Longitud</th>
+                <th>Företagsnamn</th>
+                <th>Slagord</th>
+                <th>bs</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var forecast in forecasts)
+            @foreach (var user in users)
             {
                 <tr>
-                    <td>@forecast.Date.ToShortDateString()</td>
-                    <td>@forecast.TemperatureC</td>
-                    <td>@forecast.TemperatureF</td>
-                    <td>@forecast.Summary</td>
+                    <td>@user.id</td>
+                    <td>@user.name</td>
+                    <td>@user.username</td>
+                    <td>@user.email</td>
+                    <td>@user.phone</td>
+                    <td>@user.website</td>
+                    <td>@user.address.street</td>
+                    <td>@user.address.suite</td>
+                    <td>@user.address.city</td>
+                    <td>@user.address.zipcode</td>
+                    <td>@user.address.geo.lat</td>
+                    <td>@user.address.geo.lng</td>
+                    <td>@user.company.name</td>
+                    <td>@user.company.catchPhrase</td>
+                    <td>@user.company.bs</td>
+
                 </tr>
             }
         </tbody>
@@ -37,28 +62,69 @@ else
 }
 
 @code {
-    private WeatherForecast[]? forecasts;
+
+    public List<User>? users = new List<User>();
 
     protected override async Task OnInitializedAsync()
     {
-        // Simulate asynchronous loading to demonstrate streaming rendering
-        await Task.Delay(500);
 
-        var startDate = DateOnly.FromDateTime(DateTime.Now);
-        var summaries = new[] { "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching" };
-        forecasts = Enumerable.Range(1, 5).Select(index => new WeatherForecast
-        {
-            Date = startDate.AddDays(index),
-            TemperatureC = Random.Shared.Next(-20, 55),
-            Summary = summaries[Random.Shared.Next(summaries.Length)]
-        }).ToArray();
+        // await Task.Delay(500);
+
+        var client = new HttpClient();
+        users = await client.GetFromJsonAsync<List<User>>("https://jsonplaceholder.typicode.com/users");
+
+        // if (response.IsSuccessStatusCode)
+        // {
+        //     var data = await response.Content.ReadAsStringAsync();
+
+        //     users = JsonSerializer.Deserialize<List<User>>(data);
+
+
+        // }
+        // else
+        // {
+        //     users = null;
+        // }
+
+        // Simulate asynchronous loading to demonstrate streaming rendering
+
+
     }
 
-    private class WeatherForecast
+
+    public class User
     {
-        public DateOnly Date { get; set; }
-        public int TemperatureC { get; set; }
-        public string? Summary { get; set; }
-        public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+        public int id { get; set; }
+        public string? name { get; set; }
+        public string? username { get; set; }
+        public string? email { get; set; }
+        public Address? address { get; set; }
+        public string? phone { get; set; }
+        public string? website { get; set; }
+        public Company? company { get; set; }
+
+    }
+
+    public class Address
+    {
+        public string? street { get; set; }
+        public string? suite { get; set; }
+        public string? city { get; set; }
+        public string? zipcode { get; set; }
+        public Geo? geo { get; set; }
+
+    }
+
+    public class Geo
+    {
+        public double lat { get; set; }
+        public double lng { get; set; }
+    }
+
+    public class Company
+    {
+        public string? name { get; set;  }
+        public string? catchPhrase { get; set;  }
+        public string? bs { get; set;  }
     }
 }
