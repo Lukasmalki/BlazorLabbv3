@@ -2,12 +2,15 @@ namespace BlazorLabbv3.Components.Pages
 {
 	public partial class ExistingUsers
 	{
-		public List<User> Users { get; set; }
+		public List<User>? Users { get; set; }
 
 		protected override async Task OnInitializedAsync()
 		{
 			UserDataFromApi userData = new UserDataFromApi();
-			var usersList = userData.GetUsersAsync();
+			UserExtensions userEx = new UserExtensions();
+			Users = await userData.GetUsersAsync();
+			Users = userEx.SortUsersByName(Users);
+			Users = userEx.Show5Users(Users);
 			await Task.Delay(250);
 
 
