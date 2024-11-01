@@ -9,122 +9,60 @@
 
 <p>Existerande användare</p>
 
-@if (users == null)
+@if (Users == null)
 {
-    <p><em>Loading...</em></p>
+	<p><em>Loading...</em></p>
 }
 else
 {
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Namn</th>
-                <th>Användarnamn</th>
-                <th>Email</th>
-                <th>Telefonnummer</th>
-                <th>Hemsida</th>
-                <th>Gatuadress</th>
-                <th>Lägenhet</th>
-                <th>Stad</th>
-                <th>Postnummer</th>
-                <th>Latitud</th>
-                <th>Longitud</th>
-                <th>Företagsnamn</th>
-                <th>Slagord</th>
-                <th>bs</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var user in users)
-            {
-                <tr>
-                    <td>@user.id</td>
-                    <td>@user.name</td>
-                    <td>@user.username</td>
-                    <td>@user.email</td>
-                    <td>@user.phone</td>
-                    <td>@user.website</td>
-                    <td>@user.address.street</td>
-                    <td>@user.address.suite</td>
-                    <td>@user.address.city</td>
-                    <td>@user.address.zipcode</td>
-                    <td>@user.address.geo.lat</td>
-                    <td>@user.address.geo.lng</td>
-                    <td>@user.company.name</td>
-                    <td>@user.company.catchPhrase</td>
-                    <td>@user.company.bs</td>
+	<button>Visa Alla</button>
+	<button>hejeh</button>
+	<button>hejeh</button>
+	<table class="table">
+		<thead>
+			<tr>
 
-                </tr>
-            }
-        </tbody>
-    </table>
+				<th>Id</th>
+				<th>Namn</th>
+				<th>Användarnamn</th>
+				<th>Email</th>
+				<th>Telefonnummer</th>
+				<th>Hemsida</th>
+				<th>Gatuadress</th>
+				<th>Lägenhet</th>
+				<th>Stad</th>
+				<th>Postnummer</th>
+				<th>Latitud</th>
+				<th>Longitud</th>
+				<th>Företagsnamn</th>
+				<th>Slagord</th>
+				<th>bs</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var user in Users)
+			{
+				<tr>
+					<td>@user.id</td>
+					<td>@user.name</td>
+					<td>@user.username</td>
+					<td>@user.email</td>
+					<td>@user.phone</td>
+					<td>@user.website</td>
+					<td>@user.address?.street</td>
+					<td>@user.address?.suite</td>
+					<td>@user.address?.city</td>
+					<td>@user.address?.zipcode</td>
+					<td>@user.address?.geo?.lat</td>
+					<td>@user.address?.geo?.lng</td>
+					<td>@user.company?.name</td>
+					<td>@user.company?.catchPhrase</td>
+					<td>@user.company?.bs</td>
+
+				</tr>
+			}
+		</tbody>
+	</table>
 }
 
-@code {
 
-    public List<User>? users = new List<User>();
-
-    protected override async Task OnInitializedAsync()
-    {
-
-        // await Task.Delay(500);
-
-        var client = new HttpClient();
-        users = await client.GetFromJsonAsync<List<User>>("https://jsonplaceholder.typicode.com/users");
-
-        // if (response.IsSuccessStatusCode)
-        // {
-        //     var data = await response.Content.ReadAsStringAsync();
-
-        //     users = JsonSerializer.Deserialize<List<User>>(data);
-
-
-        // }
-        // else
-        // {
-        //     users = null;
-        // }
-
-        // Simulate asynchronous loading to demonstrate streaming rendering
-
-
-    }
-
-
-    public class User
-    {
-        public int id { get; set; }
-        public string? name { get; set; }
-        public string? username { get; set; }
-        public string? email { get; set; }
-        public Address? address { get; set; }
-        public string? phone { get; set; }
-        public string? website { get; set; }
-        public Company? company { get; set; }
-
-    }
-
-    public class Address
-    {
-        public string? street { get; set; }
-        public string? suite { get; set; }
-        public string? city { get; set; }
-        public string? zipcode { get; set; }
-        public Geo? geo { get; set; }
-
-    }
-
-    public class Geo
-    {
-        public double lat { get; set; }
-        public double lng { get; set; }
-    }
-
-    public class Company
-    {
-        public string? name { get; set;  }
-        public string? catchPhrase { get; set;  }
-        public string? bs { get; set;  }
-    }
-}
