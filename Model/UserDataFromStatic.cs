@@ -1,6 +1,6 @@
 ﻿namespace BlazorLabbv3
 {
-	public class UserDataFromStatic
+	public class UserDataFromStatic : IUserData
 	{
 		public async Task<List<User>> GetUsersAsync()
 		{

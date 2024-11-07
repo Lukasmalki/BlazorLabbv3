@@ -2,10 +2,11 @@
 @attribute [StreamRendering]
 @rendermode InteractiveServer
 @using System.Text.Json;
+@using BlazorLabbv3;
 
 <PageTitle>Users</PageTitle>
 
-<h1>Users</h1>
+<h1>Användare</h1>
 
 <p>Existerande användare</p>
 
@@ -15,10 +16,16 @@
 }
 else
 {
-	<button>Visa Alla</button>
-	<button>hejeh</button>
-	<button>hejeh</button>
+	<button @onclick="ShowMoreOrLessUsers">Visa Alla</button>
+	<input type="text" placeholder="Sök" @bind="searchQuery"/>
 	<table class="table">
+		<thead>
+			<tr>
+				<th><button @onclick="SortById">@(_isSortedById ? "▲" : "▼")</button></th>
+				<th><button @onclick="SortByName">@(_isSortedByName ? "▲" : "▼")</button></th>
+				<th><button @onclick="SortByUsername">@(_isSortedByUsername? "▲" : "▼")</button></th>
+			</tr>
+		</thead>
 		<thead>
 			<tr>
 
@@ -40,7 +47,7 @@ else
 			</tr>
 		</thead>
 		<tbody>
-			@foreach (var user in Users)
+			@foreach (var user in FilteredUsers)
 			{
 				<tr>
 					<td>@user.id</td>
