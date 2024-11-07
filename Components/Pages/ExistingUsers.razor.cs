@@ -3,22 +3,24 @@ namespace BlazorLabbv3.Components.Pages
 	public partial class ExistingUsers
 	{
 		public List<User>? Users { get; set; }
+		public List<User>? DisplayUsers { get; set; }
 		private bool _isShowing5Users = true;
 		private bool _isSortedById = false;
 		private bool _isSortedByName = true;
 		private bool _isSortedByUsername = false;
 		private string searchQuery = "";
-		public List<User>? FilteredUsers => Users?.Where(u => u.name.Contains(searchQuery, StringComparison.OrdinalIgnoreCase)).ToList();
+		public List <User>? FilteredUsers => Users?.Where(u => u.name.Contains(searchQuery, StringComparison.OrdinalIgnoreCase)).ToList();
+
+
+		// getting users from api
+		UserDataFromApi userData = new UserDataFromApi();
+
+		// getting my own created users
+		//UserDataFromStatic userData = new UserDataFromStatic();
 
 		protected override async Task OnInitializedAsync()
 		{
 			await Task.Delay(250);
-
-			// getting users from api
-			UserDataFromApi userData = new UserDataFromApi();
-
-			// getting my own created users
-			//UserDataFromStatic userData = new UserDataFromStatic();
 
 
 			Users = await userData.GetUsersAsync();
@@ -30,7 +32,7 @@ namespace BlazorLabbv3.Components.Pages
 		}
 
 
-		private void ShowMoreOrLessUsers()
+		private async Task ShowMoreOrLessUsers()
 		{
 			if (!_isShowing5Users)
 			{
@@ -38,7 +40,7 @@ namespace BlazorLabbv3.Components.Pages
 			}
 			else
 			{
-				Users = Users = Users?.Take(10).ToList();
+				Users = await userData.GetUsersAsync();
 			}
 			_isShowing5Users = !_isShowing5Users;
 		}

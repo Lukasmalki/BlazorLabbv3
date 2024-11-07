@@ -16,7 +16,7 @@
 }
 else
 {
-	<button @onclick="ShowMoreOrLessUsers">Visa Alla</button>
+	<button @onclick="ShowMoreOrLessUsers">Visa @(_isShowing5Users ? "alla" : "färre")</button>
 	<input type="text" placeholder="Sök" @bind="searchQuery"/>
 	<table class="table">
 		<thead>
